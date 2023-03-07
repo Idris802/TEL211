@@ -1,0 +1,4 @@
+<launch>
+  <node name="virtual_gamepad" pkg="imrt_virtual_joy" type="virtual_gamepad" output="screen">
+  </node>
+</launch>

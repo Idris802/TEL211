@@ -1,0 +1,15 @@
+<launch>
+    <include file="$(find task2_simulator)/launch/world_bringup.launch"/>
+    <node 
+        pkg="imrt_virtual_joy"
+        type="virtual_gamepad"
+        name="virtual_gamepad"
+        output="screen">
+    </node>
+    <node 
+        pkg="imrt_teleop"
+        type="imrt_teleop"
+        name="imrt_teleop"
+        output="screen">
+    </node>
+</launch>

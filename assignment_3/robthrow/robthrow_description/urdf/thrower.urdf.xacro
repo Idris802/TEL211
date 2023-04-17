@@ -1,0 +1,157 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot_thrower">
+
+  <xacro:arg name="robot_namespace" default="" />
+  <xacro:property name="base_width" value="0.2" />
+  <xacro:property name="arm_length" value="6.0" />
+  <xacro:property name="arm_radius" value="0.04" />
+  <xacro:property name="arm_offset" value="0.6" />
+  <xacro:property name="basket_length" value="2.0" />
+  <xacro:property name="basket_height" value="0.02" />
+
+
+
+  <material name="white" >
+    <color rgba="1 1 1 1" />
+  </material>
+
+  <material name="black" >
+    <color rgba="0 0 0 1" />
+  </material>
+
+
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>$(arg robot_namespace)</robotNamespace>
+      <legacyModeNS>true</legacyModeNS>
+    </plugin>
+  </gazebo>
+
+
+
+
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="1 ${base_width} 2" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <material name="white" />
+    </visual>
+    <collision>
+      <geometry>
+	<box size="1 ${base_width} 2" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </collision>
+  </link>
+  
+  <gazebo reference="base_link">
+    <mu1 value="1.0" />
+    <mu2 value="1.0" />
+    <kp value="100000000.0" />
+    <kd value="1.0" />
+  </gazebo>
+
+  <link name="inertial_link">
+    <inertial>
+      <mass value="50000" />
+      <origin xyz="0 0 -1" />
+      <inertia ixx="10000" ixy="0" ixz="0" iyy="10000" iyz="0" izz="10000" />
+    </inertial>
+  </link>
+
+  <joint name="inertial_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="inertial_link" />
+  </joint>
+
+
+
+
+
+  <link name="arm_link" >
+    <visual>
+      <geometry>
+        <cylinder length="${arm_length}" radius="${arm_radius}" />
+      </geometry>
+      <origin xyz="${arm_length/2 - arm_offset} 0 0" rpy="0 ${pi/2} 0" />
+      <material name="black" />
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="${arm_length}" radius="${arm_radius}" />
+      </geometry>
+      <origin xyz="${arm_length/2 - arm_offset} 0 0" rpy="0 ${pi/2} 0" />
+    </collision>
+    
+    <inertial>
+    	<mass value="0.5" />
+    	<origin xyz="0 0 0" />
+    	<inertia  ixx="0.753971666667" ixy="0" ixz="0" iyy="0.753971666667" iyz="0" izz="0.145161" />
+    </inertial>
+  </link>
+
+  <gazebo reference="arm_link">
+    <mu1 value="1.0" />
+    <mu2 value="1.0" />
+    <kp value="10000000.0" />
+    <kd value="1.0" />
+  </gazebo>
+
+
+  <link name="basket_link">
+    <visual>
+      <geometry>
+        <box size="${basket_length} 2.5 ${basket_height}" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <material name="white" />
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${basket_length} 2.5 ${basket_height}" />
+      </geometry>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+    </collision>
+    <inertial>
+      <mass value="0.5" />
+      <origin xyz="0 0 0" />
+      <inertia  ixx="0.753971666667" ixy="0" ixz="0" iyy="0.753971666667" iyz="0" izz="0.145161" />
+    </inertial>
+  </link>
+  
+
+
+
+
+  <joint name="throw_joint" type="continuous">
+    <parent link="base_link" />
+    <child link="arm_link" />
+    <origin xyz="0 ${base_width/2 + arm_radius} 0" rpy="0 0 0" />
+    <axis xyz="0 1 0" rpy="0 0 0" />
+  </joint>
+
+  <transmission name="thorw_trans" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="throw_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="throw_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  
+  <joint name="basket_joint" type="fixed">
+    <parent link="arm_link" />
+    <child link="basket_link" />
+    <origin xyz="${arm_length-arm_offset} 0 ${arm_radius}" rpy="0 0 0" />
+  </joint>
+
+
+
+
+</robot>

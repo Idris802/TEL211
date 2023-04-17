@@ -1,0 +1,10 @@
+# Publish joint states ---------------------------------------
+thrower_joint_publisher:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50  
+
+# Position Controller ----------------------------------------
+thrower_position_controller:
+  type: effort_controllers/JointPositionController
+  joint: throw_joint
+  pid: {p: 68000.0, i: 1000.0, d: 2000.0}

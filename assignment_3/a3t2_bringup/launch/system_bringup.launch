@@ -1,0 +1,12 @@
+<launch>
+    <include file="$(find robthrow_gazebo)/launch/robthrow_gazebo.launch"/>
+    <include file="$(find task2_simulator)/launch/spawn_husky.launch"/>
+    <include file="$(find imrt_speech)/launch/speech.launch"/>
+    <include file="$(find imrt_virtual_joy)/launch/joy.launch"/>
+    <node pkg="imrt_teleop" type="teleop_triggers" name="trigger_node" output="screen">
+        <remap from='teleop/button1_trigger' to="robot_thrower/throw"/>
+        <remap from='teleop/button2_trigger' to="robot_thrower/reload"/>
+        <remap from='teleop/button3_trigger' to="text_to_speech/say_random"/>
+        <remap from='teleop/cmd_vel' to="husky_velocity_controller/cmd_vel"/>
+    </node>
+</launch>

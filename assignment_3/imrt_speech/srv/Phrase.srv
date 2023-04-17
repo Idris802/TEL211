@@ -1,0 +1,6 @@
+# Requests a phrase 
+string phrase
+---
+bool success # Sucsess response 
+string message # Message response
+

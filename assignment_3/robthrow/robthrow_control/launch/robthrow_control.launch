@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+
+<launch>
+
+    <arg name="namespace" default="robot_thrower" />
+    <arg name="robot_description_file" default="$(find robthrow_description)/urdf/thrower.urdf.xacro" />
+
+    <group ns="$(arg namespace)" >
+    
+	<param name="robot_description" command="$(find xacro)/xacro '$(arg robot_description_file)' robot_namespace:=$(arg namespace)" />
+  
+        <rosparam command="load" file="$(find robthrow_control)/config/control.yaml" />
+  
+	<node name="base_controller_spawner" pkg="controller_manager" type="spawner"
+            args="thrower_joint_publisher thrower_position_controller" output="screen" />
+    
+        <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
+        
+        <node pkg="robthrow_control" type="thrower_control" name="thrower_control" output="screen" />
+
+    </group>
+
+
+
+
+
+</launch>

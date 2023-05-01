@@ -1,0 +1,5 @@
+<launch>
+  <!-- Load the URDF from the xacro file and generate a robot_description parameter -->
+  <param name="robot_description" command="xacro $(find imrt_description)/urdf/imrt.urdf.xacro"/>
+
+</launch>

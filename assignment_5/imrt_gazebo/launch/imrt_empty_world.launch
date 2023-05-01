@@ -1,0 +1,19 @@
+<launch>
+  <!-- Include Gazebo ROS empty world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="gui" value="true"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <!-- Include robot description -->
+  <include file="$(find imrt_description)/launch/description.launch"/>
+
+  <!-- Include diff drive controller -->
+  <include file="$(find imrt_control)/launch/diff_drive_control.launch"/>
+
+  <!-- Spawn IMRT robot in Gazebo -->
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" respawn="false"
+        args="-urdf -model imrt_robot -param robot_description -x 0 -y 0 -z 0.3"/>
+</launch>

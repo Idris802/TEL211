@@ -1,0 +1,15 @@
+<launch>
+  <!-- Load the URDF model for the IMRT robot -->
+  <include file="$(find imrt_description)/launch/description.launch"/>
+
+  <!-- Load the diff_drive_controller parameters -->
+  <rosparam file="$(find imrt_control)/control/diff_drive_control.yaml" command="load"/>
+
+  <!-- Start the robot state publisher -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+  <!-- Start the controller spawner -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen"
+        args="imrt_joint_publisher imrt_velocity_controller --no-timeout"/>
+
+</launch>

@@ -1,0 +1,12 @@
+<launch>
+  <!-- Include imrt_empty_world.launch -->
+  <include file="$(find imrt_gazebo)/launch/imrt_empty_world.launch"/>
+
+  <!-- Start the virtual_gamepad node -->
+  <node pkg="imrt_virtual_joy" name="virtual_gamepad" type="virtual_gamepad" output="screen"/>
+
+  <!-- Start the imrt_teleop node -->
+  <node pkg="imrt_teleop" name="imrt_teleop" type="imrt_teleop" output="screen">
+    <remap from="husky_velocity_controller/cmd_vel" to="/imrt_velocity_controller/cmd_vel"/>
+  </node>
+</launch>
